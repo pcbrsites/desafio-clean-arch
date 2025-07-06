@@ -1,6 +1,6 @@
-version: '3'
 
 services:
+ 
   mysql:
     image: mysql:5.7
     container_name: mysql
@@ -9,10 +9,17 @@ services:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: orders
       MYSQL_PASSWORD: root
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-proot"]
+      interval: 5s
+      timeout: 10s
+      retries: 3
     ports:
-      - 3306:3306
+      - 3307:3306
     volumes:
       - .docker/mysql:/var/lib/mysql
+    networks:
+      - db
 
   rabbitmq:
     image: rabbitmq:3-management
@@ -24,3 +31,52 @@ services:
     environment:
       RABBITMQ_DEFAULT_USER: guest
       RABBITMQ_DEFAULT_PASS: guest
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    networks:
+      - web
+
+  migrate:
+    image: migrate/migrate
+    container_name: migrate
+    volumes:
+      - ./sql/migrations:/migrations
+    environment:
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_USER: root
+      DB_PASSWORD: root
+      DB_NAME: orders
+    command: ["-path", "/migrations", "-database", "mysql://root:root@tcp(mysql:3306)/orders", "up"]  
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - db
+  ordersystem:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ordersystem
+    ports:
+      - 8000:8000
+      - 50051:50051
+      - 8080:8080 
+    volumes:
+      - ./cmd/ordersystem/.env.docker:/root/.env
+    depends_on:
+      mysql:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    networks:
+      - web
+      - db
+networks:
+  db:
+    driver: bridge
+  web:
+    driver: bridge
