@@ -2,6 +2,9 @@ syntax = "proto3";
 package pb;
 option go_package = "internal/infra/grpc/pb";
 
+
+message blank{}
+
 message CreateOrderRequest {
   string id = 1;
   float price = 2;
@@ -32,5 +35,5 @@ message Order {
 
 service OrderService {
   rpc CreateOrder(CreateOrderRequest) returns (CreateOrderResponse);
-  rpc ListOrders(ListOrdersRequest) returns (ListOrdersResponse);
+  rpc ListOrders(blank) returns (ListOrdersResponse);
 }
