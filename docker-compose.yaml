@@ -64,7 +64,7 @@ services:
     ports:
       - 8000:8000
       - 50051:50051
-      - 8080:8080 
+      - 8080:8080
     volumes:
       - ./cmd/ordersystem/.env.docker:/root/.env
     depends_on:
