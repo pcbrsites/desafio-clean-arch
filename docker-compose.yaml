@@ -9,12 +9,6 @@ services:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: orders
       MYSQL_PASSWORD: root
-    healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-proot"]
-      interval: 5s
-      timeout: 10s
-      retries: 3
-      start_period: 10s
     ports:
       - 3307:3306
     volumes:
