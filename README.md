@@ -32,7 +32,7 @@ Este repositório contém a implementação de um sistema de gerenciamento de pe
 ### Run
 
 ```bash
-docker compose up
+docker compose up --build
 ```
 
 > **Atenção**:
