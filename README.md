@@ -27,13 +27,27 @@ Este repositório contém a implementação de um sistema de gerenciamento de pe
 - GRPC Service: porta 50051
 - GraphQL: porta 8080/graphql
 
-## docker compose
+## Docker Compose
 
-### run
+### Run
 
 ```bash
 docker compose up
 ```
+
+> **Atenção**:
+>
+> Aguarde a inicialização dos serviços, incluindo o banco de dados e RabbitMQ.
+>
+> A aplicação será iniciada automaticamente em cerca de 15/30 segundos.
+>
+> **Logs**:
+> ordersystem | O sistema está iniciado, aguardando alguns segundos...
+> ordersystem | Starting web server on port :8000  
+> ordersystem | Starting gRPC server on port 50051  
+> ordersystem | Starting GraphQL server on port 8080
+>
+> --
 
 ## Teste
 

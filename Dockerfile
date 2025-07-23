@@ -14,4 +14,4 @@ COPY --from=builder /app/main .
 
 EXPOSE 8080
 
-CMD ["./main"]
+CMD ["sh", "-c", "echo 'o sistema está iniciado, aguardando alguns segundos...' && sleep 15 && ./main"]
